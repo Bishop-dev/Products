@@ -1,13 +1,11 @@
 package com.inflation.products.metro;
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.DefaultCredentialsProvider;
 import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.inflation.products.entity.Item;
-import com.inflation.products.entity.Vendor;
+import com.inflation.products.factory.WebClientFactory;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -17,20 +15,19 @@ import java.nio.charset.StandardCharsets;
 @Component
 public class MetroParser {
 
-
+  @Autowired private WebClientFactory webClientFactory;
 
   @Scheduled(fixedDelay = 10000)
   public void start() {
-    try (WebClient client = new WebClient(BrowserVersion.CHROME, "proxyIp", 1234)) {
-      DefaultCredentialsProvider credentialsProvider = (DefaultCredentialsProvider) client.getCredentialsProvider();
-      credentialsProvider.addCredentials("proxyLogin", "proxyPassword");
+    try (WebClient client = webClientFactory.createProxyClient()) {
       // step 1 - get categories
       // https://stores-api.zakaz.ua/stores/48215632/categories/
       Charset charset = StandardCharsets.UTF_8;
       String shopId = "48215632";
       client.addRequestHeader("Accept-Language", "ru");
       client.addRequestHeader("Accept-Charset", "utf-8");
-      Page categoriesPage = client.getPage("https://stores-api.zakaz.ua/stores/" + shopId + "/categories/");
+      Page categoriesPage =
+          client.getPage("https://stores-api.zakaz.ua/stores/" + shopId + "/categories/");
       String categoriesJsonStr = categoriesPage.getWebResponse().getContentAsString(charset);
       JSONArray categoriesJson = new JSONArray(categoriesJsonStr);
       for (int i = 0; i < categoriesJson.length(); i++) {
@@ -45,7 +42,9 @@ public class MetroParser {
           // https://stores-api.zakaz.ua/stores/48215632/categories/bread-metro/products/
           Page productsPage =
               client.getPage(
-                  "https://stores-api.zakaz.ua/stores/" + shopId + "/categories/"
+                  "https://stores-api.zakaz.ua/stores/"
+                      + shopId
+                      + "/categories/"
                       + subCategoryId
                       + "/products/?page=1");
           String productsJson = productsPage.getWebResponse().getContentAsString(charset);
@@ -65,19 +64,19 @@ public class MetroParser {
             int bundle = producer.getInt("bundle");
             String unit = product.getString("unit");
 
-            Item item = new Item();
-            item.setSku(sku);
-            item.setCity("Kharkiv");
-            item.setShopId(shopId);
-            item.setVendor(Vendor.METRO);
-            item.setTitle(title);
-            item.setPrice(price);
-            item.setCountry(country);
-            item.setWeight(weight);
-            item.setTrademark(trademark);
-            item.setTrademarkSlug(trademarkSlug);
-            item.setBundle(bundle);
-            item.setUnit(unit);
+//            Item item = new Item();
+//            item.setSku(sku);
+//            item.setCity("Kharkiv");
+//            item.setShopId(shopId);
+//            item.setVendor(Vendor.METRO);
+//            item.setTitle(title);
+//            item.setPrice(price);
+//            item.setCountry(country);
+//            item.setWeight(weight);
+//            item.setTrademark(trademark);
+//            item.setTrademarkSlug(trademarkSlug);
+//            item.setBundle(bundle);
+//            item.setUnit(unit);
           }
         }
       }
