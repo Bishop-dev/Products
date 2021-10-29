@@ -1,1 +1,21 @@
+---
+spring:
+  profiles:
+    active: ${ENV:local},mysql
+---
+spring:
+  profiles: mysql
+  datasource:
+    url: jdbc:mysql://${db.host:localhost}:${db.port:3300}/${db.instance:products_db}
+    username: ${db.user:admin}
+    password: ${db.password:password}
 
+  jpa:
+    show-sql: true
+    format_sql: true
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    hibernate:
+      dialect: org.hibernate.dialect.MySQL5Dialect
+      ddl-auto: none
+      naming:
+        strategy: org.hibernate.cfg.ImprovedNamingStrategy

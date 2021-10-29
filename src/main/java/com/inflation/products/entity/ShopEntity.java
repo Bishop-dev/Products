@@ -1,5 +1,5 @@
 package com.inflation.products.entity;
 
-public enum Vendor {
+public enum ShopEntity {
   METRO
 }
