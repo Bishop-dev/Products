@@ -39,13 +39,13 @@ public class ItemHistoryEntity {
   @Column(name = "date_of_parsing")
   private Date dateOfParsing;
 
-  // обычная цена
-  @Column(name = "price")
-  private double price;
+  // текущая цена
+  @Column(name = "current_price")
+  private double currentPrice;
 
-  // цена по скидке сейчас
-  @Column(name = "discount_price")
-  private double discountPrice;
+  // обычная цена
+  @Column(name = "old_price")
+  private double oldPrice;
 
   @Column(name = "shop")
   @Enumerated(EnumType.STRING)
