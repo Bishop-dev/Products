@@ -1,7 +1,10 @@
 package com.inflation.products.entity;
 
 import com.inflation.products.entity.enums.MeasureUnits;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Column;
@@ -10,12 +13,17 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * Хранение состава продукта: калорийность, жиры, углеводы
  */
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
+@Table(name = "nutrition")
 public class NutritionEntity {
     @Id
     @GeneratedValue(generator = "uuid")

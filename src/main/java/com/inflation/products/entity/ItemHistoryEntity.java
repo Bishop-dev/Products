@@ -25,7 +25,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "itemHistory")
+@Table(name = "item_history")
 public class ItemHistoryEntity {
   @Id
   @GeneratedValue(generator = "uuid")
